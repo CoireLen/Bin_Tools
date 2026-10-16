@@ -281,9 +281,10 @@ fn handle_key(state: &mut AppState, key: KeyCode) {
             _ => {}
         },
         FocusField::DataType => match key {
-            KeyCode::Enter | KeyCode::Char(' ') | KeyCode::Down | KeyCode::Tab => {
+            KeyCode::Enter | KeyCode::Char(' ') => {
                 state.dtype_open = true;
             }
+            KeyCode::Down | KeyCode::Tab => state.focus = FocusField::Action,
             KeyCode::Up => state.focus = FocusField::NumGroups,
             KeyCode::Left => {
                 if state.dtype_index > 0 { state.dtype_index -= 1; }
@@ -374,7 +375,7 @@ fn draw(f: &mut ratatui::Frame, state: &AppState) {
         } else {
             Style::default().fg(Color::DarkGray)
         })
-        .title(" 数据块类型 (← → 切换 / Enter 展开列表) ");
+        .title(" 数据块类型 (← → 切换 / Enter 选择 / ↓ 下一步) ");
     let dt_label = Span::styled(
         state.current_dtype().label(),
         if dt_focused { Style::default().fg(Color::Magenta) } else { Style::default().fg(Color::White) },
